@@ -45,8 +45,30 @@ get("/random/results") do
   @min_num = params.fetch("user_min").to_f
   @max_num = params.fetch("user_max").to_f
 
-  # Ensure @min_num is smaller than @max_num
   @the_result = rand(@min_num..@max_num)
 
   erb(:random_results)
+end
+
+
+get("/payment/new") do
+  erb(:payment)
+end
+
+get("/payment/results") do
+
+  @apr = params.fetch("user_apr").to_f
+  @years = params.fetch("user_years").to_i
+  @pv = params.fetch("user_pv").to_f
+
+  @apr_divided_by_100 = @apr / 100 
+  @r = @apr_divided_by_100 / 12
+  @n = @years * 12
+
+  @numerator = @r * @pv
+  @denom = (1-(1+ @r)**-@n)
+
+  @payment = @numerator / @denom
+
+  erb(:payment_results)
 end
